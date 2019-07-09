@@ -57,6 +57,11 @@ server.get('/api/posts/:id', (req, res) => {
     .catch(err => res.status(500).json({ error: 'The post information could not be retrieved.' }))
 })
 
+server.get('/api/posts/:id/comments', (req, res) => {
+
+})
+
+
 server.delete('/api/users/:id', (req, res) => {
     const id = req.params.id;
     db.remove(id)
@@ -70,5 +75,29 @@ server.delete('/api/users/:id', (req, res) => {
     })
     .catch(err => res.status(500).json({ error: 'The user could not be removed' }))
 })
+
+server.put('/api/posts/:id', (req, res) => {
+    const id = req.params.comments;
+    const comment = req.body;
+    db.findPostComments(id)
+    .then(post => {
+        if(post){
+            if(!comment.title || !comment.contents) {
+                db.update(id, comment)
+                .then(OK => res.status(200).json(OK))
+                .catch(err => res.status(500).json({ error: 'There was an error while saving the comment to the database.' }))
+            }
+            else {
+                res.status(400).json({ errorMessage: 'Please provide text for the comment.'})
+            }
+        }
+        else {
+            res.status(404).json({ message: 'The post with the specified ID does not exist.' })
+        }
+    })
+    .catch(err => res.status(500).json({ error: 'There was an error while saving the comment to the database.' }))
+})
+
+
 
 server.listen(7000, () => console.log('express server running on port 7000'));
