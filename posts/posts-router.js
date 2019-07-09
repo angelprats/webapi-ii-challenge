@@ -6,7 +6,7 @@ const db = require('../data/db');
 
 router.use(express.json());
 
-router.post('/api/posts', (req, res) => {
+router.post('/', (req, res) => {
     const apiInfo = req.body;
     if(!apiInfo.title || !apiInfo.contents) {
         res.status(400).json({ errorMessage: "Please provide title and contents for the post." })
@@ -18,7 +18,7 @@ router.post('/api/posts', (req, res) => {
     }
 })
 
-router.post('/api/posts/:id/comments', (req, res) => {
+router.post('/:id/comments', (req, res) => {
 const id = req.params.comments;
 const comment = req.body;
 db.insertComment()
@@ -41,24 +41,32 @@ db.insertComment(id, comment)
 })
 
 
-router.get('api/posts', (req, res) => {
+router.get('/', (req, res) => {
     db.find()
     .then(post => res.status(200).json(post))
     .catch(err => res.status(500).json({ error: 'The posts information could not be retrieved.' }))
 })
 
-router.get('/api/posts/:id', (req, res) => {
+router.get('/:id', (req, res) => {
     db.findById(id)
     .then(posts => res.status(200).json(posts))
     .catch(err => res.status(500).json({ error: 'The post information could not be retrieved.' }))
 })
 
-router.get('/api/posts/:id/comments', (req, res) => {
+router.get('/:id/comments', (req, res) => {
+    const { id } = req.params.comments;
 
+    db.findPostComments(id)
+    .then(postId => {
+
+    })
+    .catch(error => {
+        res.status(500).json(error);
+    })
 })
 
 
-router.delete('/api/posts/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
     const id = req.params.id;
     db.remove(id)
     .then(users => {
@@ -72,7 +80,7 @@ router.delete('/api/posts/:id', (req, res) => {
     .catch(err => res.status(500).json({ error: 'The user could not be removed' }))
 })
 
-router.put('/api/posts/:id', (req, res) => {
+router.put('/:id', (req, res) => {
     const id = req.params.comments;
     const comment = req.body;
     db.findPostComments(id)
