@@ -1,3 +1,6 @@
+const dotenv = require('dotenv');
+dotenv.config();
+
 const express = require('express');
 const postsRouter = require('./posts/posts-router')
 
@@ -12,5 +15,6 @@ server.get('/', (req, res) => {
 
 server.use('api/posts', postsRouter)
 
-
-server.listen(7000, () => console.log('Server running on port http://localhost:7000'));
+const port = process.env.PORT || 4000;
+server.listen(port, () => {
+    console.log(`\n*** Server running on port http://localhost:${port} ***\n`)});
