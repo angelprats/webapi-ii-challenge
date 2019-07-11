@@ -15,6 +15,9 @@ server.get('/', (req, res) => {
 
 server.use('api/posts', postsRouter)
 
-const port = process.env.PORT || 4000;
+
+
+const port = process.env.PORT || 8000;
 server.listen(port, () => {
-    console.log(`\n*** Server running on port http://localhost:${port} ***\n`)});
+    console.log(`\n*** Server running on port http://localhost:${port} ***\n`)
+});
